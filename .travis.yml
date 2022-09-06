@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t davebulaklak/react-test  -f Dockerfile.dev ./client/Dockerbuild.dev ./client
+
+script:
+  - docker run davebulaklak/react-test npm test -- --coverage
+
+after_success:
+  - docker built -t davebulaklak/multi-client ./client
+  - docker built -t davebulaklak/multi-nginx ./nginx
+  - docker built -t davebulaklak/multi-server ./server
+  - docker built -t davebulaklak/multi-worker ./worker
